@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import ListItem from "@material-ui/core/ListItem";
 
 const styles = {
   root: {
@@ -67,8 +69,22 @@ class Header extends React.Component {
               open={Boolean(isMenuOpen)}
               onClose={this.handleMenuClose}
             >
-              <MenuItem onClick={this.handleMenuClose}>Настройки</MenuItem>
-              <MenuItem onClick={this.handleMenuClose}>Список напоминаний</MenuItem>
+              <MenuItem
+                to="/settings"
+                button
+                component={Link}
+                onClick={this.handleMenuClose}
+              >
+                Настройки
+              </MenuItem>
+              <MenuItem
+                to="/cards"
+                button
+                component={Link}
+                onClick={this.handleMenuClose}
+              >
+                Список напоминаний
+              </MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
