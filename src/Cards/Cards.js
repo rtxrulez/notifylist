@@ -15,7 +15,8 @@ import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   card: {
-    maxWidth: 500
+    width: 500,
+    marginBottom: "15px"
   },
   media: {
     // ⚠️ object-fit is not supported by IE11.
@@ -34,33 +35,62 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit
   },
   cardActions: {
-    flexDirection: 'row-reverse'
+    flexDirection: "row-reverse"
   }
 });
 
 class Cards extends React.Component {
-  state = {};
+  state = {
+    taskList: {}
+  };
+
+  getList() {
+    fetch(`http://localhost:3000/data/data.json`)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        this.setState({
+          taskList: json
+        });
+      });
+  }
+
+  componentDidMount() {
+    console.log("test");
+    this.getList();
+  }
 
   render() {
     const { classes } = this.props;
+    const data = this.state.taskList;
 
-    return (
-      <div className={classes.cardList}>
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography align="left" component="p">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.cardActions}>
-            <IconButton className={classes.button} aria-label="Delete">
-              <EditIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </div>
-    );
+    console.log("ddd", data);
+
+    if (Object.keys(data).length !== 0) {
+      return (
+        <div className={classes.cardList}>
+          {data.map((item, key) => {
+            return (
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography align="left" component="p">
+                    {item.desc}
+                  </Typography>
+                </CardContent>
+                <CardActions className={classes.cardActions}>
+                  <IconButton className={classes.button} aria-label="Delete">
+                    <EditIcon />
+                  </IconButton>
+                </CardActions>
+              </Card>
+            );
+          })}
+        </div>
+      );
+    } else {
+      return <div> Список пуст </div>;
+    }
   }
 }
 

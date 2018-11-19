@@ -1,0 +1,26 @@
+[
+    {
+        "desc": "Полить кактус",
+        "time": {
+            "hours": 20,
+            "minutes": 31
+        },
+        "isDone": true
+    },
+    {
+        "desc": "Зайти за хлебом",
+        "time": {
+            "hours": 17,
+            "minutes": 9
+        },
+        "isDone": true
+    },
+    {
+        "desc": "Позвонить другу",
+        "time": {
+            "hours": 20,
+            "minutes": 31
+        },
+        "isDone": true
+    }
+]
