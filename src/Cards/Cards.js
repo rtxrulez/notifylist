@@ -12,6 +12,7 @@ import Icon from "@material-ui/core/Icon";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
+import Input from "@material-ui/core/Input";
 
 const styles = theme => ({
   card: {
@@ -36,12 +37,26 @@ const styles = theme => ({
   },
   cardActions: {
     flexDirection: "row-reverse"
+  },
+  input: {
+    display: "none",
+    fontSize: "20px"
+  },
+  inputShow: {
+    display: "block"
+  },
+  descHide: {
+    display: "none"
+  },
+  descGreen: {
+    color: "black"
   }
 });
 
 class Cards extends React.Component {
   state = {
-    taskList: {}
+    taskList: {},
+    editId: null
   };
 
   getList() {
@@ -56,6 +71,20 @@ class Cards extends React.Component {
       });
   }
 
+  editItem(id) {
+    console.log("id", id);
+    this.setState({
+      editId: id
+    });
+  }
+
+  _handleKeyPress(e) {
+    if (e.key === "Enter") {
+      console.log('e', e.target.value)
+      console.log('k', e.target.dataset.key)
+    }
+  }
+
   componentDidMount() {
     console.log("test");
     this.getList();
@@ -63,23 +92,44 @@ class Cards extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const data = this.state.taskList;
+    const { taskList, editId } = this.state;
 
-    console.log("ddd", data);
+    console.log("ddd", taskList);
 
-    if (Object.keys(data).length !== 0) {
+    if (Object.keys(taskList).length !== 0) {
       return (
         <div className={classes.cardList}>
-          {data.map((item, key) => {
+          {taskList.map((item, key) => {
             return (
-              <Card className={classes.card}>
+              <Card className={classes.card} key={key}>
                 <CardContent>
-                  <Typography align="left" component="p">
+                  <Typography
+                    className={
+                      key === editId ? classes.descHide : classes.descGreen
+                    }
+                    align="left"
+                    component="p"
+                  >
                     {item.desc}
                   </Typography>
+                  <Input
+                    defaultValue={item.desc}
+                    className={
+                      key === editId ? classes.inputShow : classes.input
+                    }
+                    inputProps={{
+                      "aria-label": "Description"
+                    }}
+                    data-key={key}
+                    onKeyPress={this._handleKeyPress}
+                  />
                 </CardContent>
                 <CardActions className={classes.cardActions}>
-                  <IconButton className={classes.button} aria-label="Delete">
+                  <IconButton
+                    className={classes.button}
+                    aria-label="Delete"
+                    onClick={() => this.editItem(key)}
+                  >
                     <EditIcon />
                   </IconButton>
                 </CardActions>
