@@ -10,6 +10,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
@@ -56,7 +57,11 @@ const styles = theme => ({
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2
-  }
+  },
+  listEmpty: {
+    margin: theme.spacing.unit * 2
+  },
+  delete: {}
 });
 
 class Cards extends React.Component {
@@ -83,10 +88,19 @@ class Cards extends React.Component {
     });
   }
 
-  editItem(id) {
-    console.log("id", id);
+  editItem(key) {
+    console.log("id", key);
     this.setState({
-      editId: parseInt(id)
+      editId: parseInt(key)
+    });
+  }
+
+  deleteItem(key) {
+    key = parseInt(key);
+    let { taskList } = this.state;
+    taskList.splice(key, 1);
+    this.setState({
+      taskList: taskList
     });
   }
 
@@ -117,8 +131,22 @@ class Cards extends React.Component {
   }
 
   componentDidMount() {
-    // json загрузка списка
-    this.getList();
+    if (localStorage.getItem("taskList").length) {
+      console.log("Есть локальный список");
+      let taskList = JSON.parse(localStorage.getItem("taskList"));
+      this.setState({
+        taskList: taskList
+      });
+    } else {
+      console.log("нет списка");
+      // json загрузка списка
+      this.getList();
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("ccc", nextState.taskList);
+    localStorage.setItem("taskList", JSON.stringify(nextState.taskList));
   }
 
   addNewItem() {
@@ -127,7 +155,7 @@ class Cards extends React.Component {
     let minute = new Date().getMinutes();
 
     taskList.push({
-      desc: "Новое поле",
+      desc: "Таймер",
       time: {
         hours: hour,
         minutes: minute
@@ -150,10 +178,10 @@ class Cards extends React.Component {
     const { classes } = this.props;
     const { taskList, editId } = this.state;
 
-    console.log("ddd", taskList);
+    let listDom = <div className={classes.listEmpty}> Список пуст </div>;
 
     if (Object.keys(taskList).length !== 0) {
-      return (
+      listDom = (
         <div className={classes.cardList}>
           {taskList.map((item, key) => {
             return (
@@ -189,26 +217,34 @@ class Cards extends React.Component {
                   >
                     <EditIcon />
                   </IconButton>
+                  <IconButton
+                    className={classes.delete}
+                    onClick={() => this.deleteItem(key)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </CardActions>
               </Card>
             );
           })}
-
-          <Button
-            variant="fab"
-            className={classes.fab}
-            color="primary"
-            onClick={e => {
-              this.addNewItem(e);
-            }}
-          >
-            <AddIcon />
-          </Button>
         </div>
       );
-    } else {
-      return <div> Список пуст </div>;
     }
+    return (
+      <div>
+        {listDom}
+        <Button
+          variant="fab"
+          className={classes.fab}
+          color="primary"
+          onClick={e => {
+            this.addNewItem(e);
+          }}
+        >
+          <AddIcon />
+        </Button>
+      </div>
+    );
   }
 }
 
