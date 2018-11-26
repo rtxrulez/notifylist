@@ -15,11 +15,16 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
+import TextField from "@material-ui/core/TextField";
 
 const styles = theme => ({
   card: {
     width: 500,
     marginBottom: "15px"
+  },
+  card2: {
+    backgroundColor: "#fff",
+    borderBottom: "4px solid #3f51b5"
   },
   media: {
     // ⚠️ object-fit is not supported by IE11.
@@ -30,6 +35,9 @@ const styles = theme => ({
     flexDirection: "column",
     alignItems: "center",
     padding: "15px"
+  },
+  hide: {
+    display: "none"
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -61,7 +69,15 @@ const styles = theme => ({
   listEmpty: {
     margin: theme.spacing.unit * 2
   },
-  delete: {}
+  delete: {},
+  timeInputEdit: {
+    display: "block",
+    textAlign: "left",
+    marginTop: theme.spacing.unit * 2
+  },
+  timeText: {
+    margin: `${theme.spacing.unit * 2}px 0`
+  }
 });
 
 class Cards extends React.Component {
@@ -89,9 +105,15 @@ class Cards extends React.Component {
   }
 
   editItem(key) {
-    console.log("id", key);
+    console.log("k", key);
+    // Если редактирование уже открыто
+    if (this.state.editId !== null) {
+      key = null;
+    } else {
+      key = parseInt(key);
+    }
     this.setState({
-      editId: parseInt(key)
+      editId: key
     });
   }
 
@@ -116,14 +138,20 @@ class Cards extends React.Component {
     let { taskList } = this.state;
 
     taskList[key].desc = val;
-    this.setState(
-      {
-        taskList: taskList
-      },
-      () => {
-        console.log(this.state, "eeeeeee");
-      }
-    );
+    this.setState({
+      taskList: taskList
+    });
+  }
+
+  handleChangeTime(e) {
+    let key = e.target.parentNode.parentNode.dataset.key;
+    let val = e.target.value;
+    let { taskList } = this.state;
+
+    taskList[key].time = val;
+    this.setState({
+      taskList: taskList
+    });
   }
 
   handleBlur(e) {
@@ -131,7 +159,10 @@ class Cards extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem("taskList").length) {
+    if (
+      localStorage.getItem("taskList") !== null &&
+      localStorage.getItem("taskList").length
+    ) {
       console.log("Есть локальный список");
       let taskList = JSON.parse(localStorage.getItem("taskList"));
       this.setState({
@@ -145,31 +176,24 @@ class Cards extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log("ccc", nextState.taskList);
     localStorage.setItem("taskList", JSON.stringify(nextState.taskList));
   }
 
   addNewItem() {
     let { taskList } = this.state;
+    let date = new Date()
+
     let hour = new Date().getHours();
-    let minute = new Date().getMinutes();
+    let minute = (date.getMinutes()<10?'0':'') + date.getMinutes()
 
     taskList.push({
       desc: "Таймер",
-      time: {
-        hours: hour,
-        minutes: minute
-      },
+      time: `${hour}:${minute}`,
       isDone: false
     });
-    this.setState(
-      {
-        taskList: taskList
-      },
-      () => {
-        console.log(this.state);
-      }
-    );
+    this.setState({
+      taskList: taskList
+    });
 
     this.editItem(this.state.taskList.length - 1);
   }
@@ -184,13 +208,17 @@ class Cards extends React.Component {
       listDom = (
         <div className={classes.cardList}>
           {taskList.map((item, key) => {
+            let isEdit = key === editId;
             return (
-              <Card className={classes.card} key={key}>
+              <Card
+                className={
+                  isEdit ? [classes.card, classes.card2].join(' ') : classes.card
+                }
+                key={key}
+              >
                 <CardContent>
                   <Typography
-                    className={
-                      key === editId ? classes.descHide : classes.descGreen
-                    }
+                    className={isEdit ? classes.descHide : classes.descGreen}
                     align="left"
                     component="p"
                   >
@@ -198,9 +226,7 @@ class Cards extends React.Component {
                   </Typography>
                   <Input
                     defaultValue={item.desc}
-                    className={
-                      key === editId ? classes.inputShow : classes.input
-                    }
+                    className={isEdit ? classes.inputShow : classes.input}
                     inputProps={{
                       "aria-label": "Description"
                     }}
@@ -209,7 +235,31 @@ class Cards extends React.Component {
                     onBlur={e => this.handleBlur(e)}
                     onChange={e => this.handleChange(e)}
                   />
+
+                  <Typography
+                    className={isEdit ? classes.hide : classes.timeText}
+                    align="left"
+                    component="p"
+                  >
+                    {item.time}
+                  </Typography>
+                  <TextField
+                    type="time"
+                    defaultValue={item.time}
+                    className={isEdit ? classes.timeInputEdit : classes.hide}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    inputProps={{
+                      step: 300 // 5 min
+                    }}
+                    data-key={key}
+                    onKeyPress={e => this._handleKeyPress(e)}
+                    onBlur={e => this.handleBlur(e)}
+                    onChange={e => this.handleChangeTime(e)}
+                  />
                 </CardContent>
+
                 <CardActions className={classes.cardActions}>
                   <IconButton
                     className={classes.button}
