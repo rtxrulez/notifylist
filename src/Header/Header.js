@@ -78,7 +78,7 @@ class Header extends React.Component {
                 Настройки
               </MenuItem>
               <MenuItem
-                to="/cards"
+                to="/"
                 button
                 component={Link}
                 onClick={this.handleMenuClose}

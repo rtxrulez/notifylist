@@ -9,6 +9,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
+import AddIcon from "@material-ui/icons/Add";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
@@ -50,6 +51,11 @@ const styles = theme => ({
   },
   descGreen: {
     color: "black"
+  },
+  fab: {
+    position: "absolute",
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
   }
 });
 
@@ -71,23 +77,73 @@ class Cards extends React.Component {
       });
   }
 
+  closeEdit() {
+    this.setState({
+      editId: null
+    });
+  }
+
   editItem(id) {
     console.log("id", id);
     this.setState({
-      editId: id
+      editId: parseInt(id)
     });
   }
 
   _handleKeyPress(e) {
     if (e.key === "Enter") {
-      console.log('e', e.target.value)
-      console.log('k', e.target.dataset.key)
+      this.closeEdit();
     }
   }
 
+  handleChange(e) {
+    let key = e.target.parentNode.dataset.key;
+    let val = e.target.value;
+    let { taskList } = this.state;
+
+    taskList[key].desc = val;
+    this.setState(
+      {
+        taskList: taskList
+      },
+      () => {
+        console.log(this.state, "eeeeeee");
+      }
+    );
+  }
+
+  handleBlur(e) {
+    this.closeEdit();
+  }
+
   componentDidMount() {
-    console.log("test");
+    // json загрузка списка
     this.getList();
+  }
+
+  addNewItem() {
+    let { taskList } = this.state;
+    let hour = new Date().getHours();
+    let minute = new Date().getMinutes();
+
+    taskList.push({
+      desc: "Новое поле",
+      time: {
+        hours: hour,
+        minutes: minute
+      },
+      isDone: false
+    });
+    this.setState(
+      {
+        taskList: taskList
+      },
+      () => {
+        console.log(this.state);
+      }
+    );
+
+    this.editItem(this.state.taskList.length - 1);
   }
 
   render() {
@@ -121,13 +177,14 @@ class Cards extends React.Component {
                       "aria-label": "Description"
                     }}
                     data-key={key}
-                    onKeyPress={this._handleKeyPress}
+                    onKeyPress={e => this._handleKeyPress(e)}
+                    onBlur={e => this.handleBlur(e)}
+                    onChange={e => this.handleChange(e)}
                   />
                 </CardContent>
                 <CardActions className={classes.cardActions}>
                   <IconButton
                     className={classes.button}
-                    aria-label="Delete"
                     onClick={() => this.editItem(key)}
                   >
                     <EditIcon />
@@ -136,6 +193,17 @@ class Cards extends React.Component {
               </Card>
             );
           })}
+
+          <Button
+            variant="fab"
+            className={classes.fab}
+            color="primary"
+            onClick={e => {
+              this.addNewItem(e);
+            }}
+          >
+            <AddIcon />
+          </Button>
         </div>
       );
     } else {
