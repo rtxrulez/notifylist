@@ -17,6 +17,9 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 
+var connect = require("react-redux").connect;
+var actions = require("../Redux/actions.jsx");
+
 const styles = theme => ({
   card: {
     width: 500,
@@ -81,6 +84,9 @@ const styles = theme => ({
 });
 
 class Cards extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
     taskList: {},
     editId: null
@@ -201,6 +207,7 @@ class Cards extends React.Component {
   render() {
     const { classes } = this.props;
     const { taskList, editId } = this.state;
+    console.log('props', this.props)
 
     let listDom = <div className={classes.listEmpty}> Список пуст </div>;
 
@@ -302,4 +309,10 @@ Cards.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Cards);
+function mapStateToProps(state) {
+  return {
+    notifications: state.get("notifications")
+  };
+}
+
+export default connect(mapStateToProps, actions)(withStyles(styles)(Cards))
