@@ -17,8 +17,6 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 
-var connect = require("react-redux").connect;
-var actions = require("../Redux/actions.jsx");
 
 const styles = theme => ({
   card: {
@@ -315,4 +313,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(Cards))
+export default withStyles(styles)(Cards)
