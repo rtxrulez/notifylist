@@ -9,7 +9,7 @@ import { Provider, connect } from "react-redux";
 
 import createStore from "./redux/store";
 import { addComment } from "./redux/actions/commentsActions";
-import { getComments, getCommentsCounts } from "./reducers";
+import { getComments, getCommentsCounts } from "./redux/reducers";
 
 // создаем хронилище
 let store = createStore();

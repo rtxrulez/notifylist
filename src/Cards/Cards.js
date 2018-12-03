@@ -16,6 +16,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
+import { connect } from "react-redux";
+import { addComment } from "../redux/actions/commentsActions";
 
 
 const styles = theme => ({
@@ -177,6 +179,8 @@ class Cards extends React.Component {
       // json загрузка списка
       this.getList();
     }
+
+    this.props.addComment('Component Did Mount')
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -205,7 +209,7 @@ class Cards extends React.Component {
   render() {
     const { classes } = this.props;
     const { taskList, editId } = this.state;
-    console.log('props', this.props)
+    console.log('props', this.props.count)
 
     let listDom = <div className={classes.listEmpty}> Список пуст </div>;
 
@@ -307,10 +311,20 @@ Cards.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+// Берет данные из глобального стейта и помещает в локальный
 function mapStateToProps(state) {
   return {
-    notifications: state.get("notifications")
+   count: state.comments.count
   };
 }
 
-export default withStyles(styles)(Cards)
+const mapDispatchToProps = {
+  addComment
+};
+
+const CardWithRedux = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Cards))
+
+export default CardWithRedux
