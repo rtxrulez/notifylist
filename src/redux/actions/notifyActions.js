@@ -4,3 +4,10 @@ export const addNotify = payload => {
     payload
   };
 };
+
+export const deleteNotify = payload => {
+  return {
+    type: "DELETE_NOTIFY",
+    payload
+  };
+};

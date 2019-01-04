@@ -8,7 +8,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import { Provider, connect } from "react-redux";
 
 import createStore from "./redux/store";
-import { addNotify } from "./redux/actions/notifyActions";
+import { addNotify, deleteNotify } from "./redux/actions/notifyActions";
 import {
   getComments,
   getCommentsCounts
@@ -23,6 +23,10 @@ store.dispatch(
     isDone: false
   })
 );
+
+store.dispatch(
+  deleteNotify(1)
+)
 
 ReactDOM.render(
   <Provider store={store}>

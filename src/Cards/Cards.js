@@ -19,7 +19,7 @@ import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 // import { addComment } from "../redux/actions/commentsActions";
-import { addNotify } from "../redux/actions/notifyActions";
+import { addNotify, deleteNotify } from "../redux/actions/notifyActions";
 import { styles } from "./CardsStyles";
 
 class Cards extends React.Component {
@@ -64,11 +64,8 @@ class Cards extends React.Component {
 
   deleteItem(key) {
     key = parseInt(key);
-    let { taskList } = this.state;
-    taskList.splice(key, 1);
-    this.setState({
-      taskList: taskList
-    });
+    let { taskList, deleteNotify } = this.props;
+    deleteNotify(parseInt(key))
   }
 
   _handleKeyPress(e) {
@@ -125,7 +122,7 @@ class Cards extends React.Component {
   }
 
   addNewItem() {
-    const {addMyNotify, taskList} = this.props
+    const { addMyNotify, taskList } = this.props;
 
     let date = new Date();
 
@@ -138,9 +135,9 @@ class Cards extends React.Component {
       isDone: false
     };
 
-    console.log('newItem', newItem)
+    console.log("newItem", newItem);
 
-    addMyNotify(newItem)
+    addMyNotify(newItem);
     this.editItem(taskList.length);
   }
 
@@ -251,14 +248,15 @@ Cards.propTypes = {
 
 // Берет данные из глобального стейта и помещает в локальный
 function mapStateToProps(state) {
-  console.log('tsss', state)
+  console.log("tsss", state);
   return {
     taskList: state.notify
   };
 }
 
 const mapDispatchToProps = {
-  addMyNotify: addNotify
+  addMyNotify: addNotify,
+  deleteNotify: deleteNotify
 };
 
 const CardWithRedux = connect(
