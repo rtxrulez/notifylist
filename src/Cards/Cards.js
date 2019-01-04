@@ -8,6 +8,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
+import Fab from "@material-ui/core/Fab";
 import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -17,7 +18,8 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
-import { addComment } from "../redux/actions/commentsActions";
+// import { addComment } from "../redux/actions/commentsActions";
+import { addNotify } from "../redux/actions/notifyActions";
 import { styles } from "./CardsStyles";
 
 class Cards extends React.Component {
@@ -123,30 +125,29 @@ class Cards extends React.Component {
   }
 
   addNewItem() {
-    let { taskList } = this.state;
+    const {addMyNotify, taskList} = this.props
+
     let date = new Date();
 
     let hour = new Date().getHours();
     let minute = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
 
-    taskList.push({
+    const newItem = {
       desc: "Таймер",
       time: `${hour}:${minute}`,
       isDone: false
-    });
-    this.setState({
-      taskList: taskList
-    });
+    };
 
-    this.editItem(this.state.taskList.length - 1);
+    console.log('newItem', newItem)
+
+    addMyNotify(newItem)
+    this.editItem(taskList.length);
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, taskList } = this.props;
     const { editId } = this.state;
     console.log("props", this.props);
-    const taskList = this.props.notifyList
-
     let listDom = <h1> Список пуст </h1>;
 
     if (Object.keys(taskList).length !== 0) {
@@ -230,16 +231,15 @@ class Cards extends React.Component {
     return (
       <div>
         {listDom}
-        <Button
-          variant="fab"
-          className={styles.fab}
+        <Fab
+          className={classes.fab}
           color="primary"
           onClick={e => {
             this.addNewItem(e);
           }}
         >
           <AddIcon />
-        </Button>
+        </Fab>
       </div>
     );
   }
@@ -252,12 +252,12 @@ Cards.propTypes = {
 // Берет данные из глобального стейта и помещает в локальный
 function mapStateToProps(state) {
   return {
-    notifyList: state.notify
+    taskList: state.notify
   };
 }
 
 const mapDispatchToProps = {
-    addNotify: addNotify
+  addMyNotify: addNotify
 };
 
 const CardWithRedux = connect(
