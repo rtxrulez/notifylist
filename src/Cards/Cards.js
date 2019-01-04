@@ -18,73 +18,7 @@ import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 import { addComment } from "../redux/actions/commentsActions";
-
-
-const styles = theme => ({
-  fab: {
-    display: 'block'
-  },
-  card: {
-    width: 500,
-    marginBottom: "15px"
-  },
-  card2: {
-    backgroundColor: "#fff",
-    borderBottom: "4px solid #3f51b5"
-  },
-  media: {
-    // ⚠️ object-fit is not supported by IE11.
-    objectFit: "cover"
-  },
-  cardList: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "15px"
-  },
-  hide: {
-    display: "none"
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit
-  },
-  cardActions: {
-    flexDirection: "row-reverse"
-  },
-  input: {
-    display: "none",
-    fontSize: "20px"
-  },
-  inputShow: {
-    display: "block"
-  },
-  descHide: {
-    display: "none"
-  },
-  descGreen: {
-    color: "black"
-  },
-  fab: {
-    position: "absolute",
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2
-  },
-  listEmpty: {
-    margin: theme.spacing.unit * 2
-  },
-  delete: {},
-  timeInputEdit: {
-    display: "block",
-    textAlign: "left",
-    marginTop: theme.spacing.unit * 2
-  },
-  timeText: {
-    margin: `${theme.spacing.unit * 2}px 0`
-  }
-});
+import { styles } from "./CardsStyles";
 
 class Cards extends React.Component {
   constructor(props) {
@@ -182,7 +116,6 @@ class Cards extends React.Component {
       // json загрузка списка
       this.getList();
     }
-
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -191,10 +124,10 @@ class Cards extends React.Component {
 
   addNewItem() {
     let { taskList } = this.state;
-    let date = new Date()
+    let date = new Date();
 
     let hour = new Date().getHours();
-    let minute = (date.getMinutes()<10?'0':'') + date.getMinutes()
+    let minute = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
 
     taskList.push({
       desc: "Таймер",
@@ -210,8 +143,9 @@ class Cards extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { taskList, editId } = this.state;
-    console.log('props', this.props.count)
+    const { editId } = this.state;
+    console.log("props", this.props);
+    const taskList = this.props.notifyList
 
     let listDom = <h1> Список пуст </h1>;
 
@@ -223,7 +157,9 @@ class Cards extends React.Component {
             return (
               <Card
                 className={
-                  isEdit ? [classes.card, classes.card2].join(' ') : classes.card
+                  isEdit
+                    ? [classes.card, classes.card2].join(" ")
+                    : classes.card
                 }
                 key={key}
               >
@@ -316,17 +252,17 @@ Cards.propTypes = {
 // Берет данные из глобального стейта и помещает в локальный
 function mapStateToProps(state) {
   return {
-   count: state.comments.count
+    notifyList: state.notify
   };
 }
 
 const mapDispatchToProps = {
-  addComment
+    addNotify: addNotify
 };
 
 const CardWithRedux = connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(Cards))
+)(withStyles(styles)(Cards));
 
-export default withStyles(styles)(Cards);
+export default CardWithRedux;
