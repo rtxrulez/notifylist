@@ -251,6 +251,7 @@ Cards.propTypes = {
 
 // Берет данные из глобального стейта и помещает в локальный
 function mapStateToProps(state) {
+  console.log('tsss', state)
   return {
     taskList: state.notify
   };
@@ -266,3 +267,5 @@ const CardWithRedux = connect(
 )(withStyles(styles)(Cards));
 
 export default CardWithRedux;
+
+// export default withStyles(styles)(Cards);
