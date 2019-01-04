@@ -1,7 +1,4 @@
 export const styles = theme => ({
-  fab: {
-    display: "block"
-  },
   card: {
     width: 500,
     marginBottom: "15px"
@@ -18,7 +15,8 @@ export const styles = theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "15px"
+    padding: "15px",
+    marginTop: "65px"
   },
   hide: {
     display: "none"
@@ -46,7 +44,7 @@ export const styles = theme => ({
     color: "black"
   },
   fab: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2
   },
