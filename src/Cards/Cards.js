@@ -21,6 +21,9 @@ import { addComment } from "../redux/actions/commentsActions";
 
 
 const styles = theme => ({
+  fab: {
+    display: 'block'
+  },
   card: {
     width: 500,
     marginBottom: "15px"
@@ -180,7 +183,6 @@ class Cards extends React.Component {
       this.getList();
     }
 
-    this.props.addComment('Component Did Mount')
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -211,7 +213,7 @@ class Cards extends React.Component {
     const { taskList, editId } = this.state;
     console.log('props', this.props.count)
 
-    let listDom = <div className={classes.listEmpty}> Список пуст </div>;
+    let listDom = <h1> Список пуст </h1>;
 
     if (Object.keys(taskList).length !== 0) {
       listDom = (
@@ -294,7 +296,7 @@ class Cards extends React.Component {
         {listDom}
         <Button
           variant="fab"
-          className={classes.fab}
+          className={styles.fab}
           color="primary"
           onClick={e => {
             this.addNewItem(e);
@@ -327,4 +329,4 @@ const CardWithRedux = connect(
   mapDispatchToProps
 )(withStyles(styles)(Cards))
 
-export default CardWithRedux
+export default withStyles(styles)(Cards);

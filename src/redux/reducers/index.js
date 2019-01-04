@@ -1,13 +1,31 @@
 import { combineReducers } from "redux";
-import {ADD_COMMENT} from "../actions/commentsTypes"
 
-const comments = (state = { count: 0, comments: [] }, action) => {
+const store = {
+  notify: [
+    {
+      desc: "Полить кактус",
+      time: "17:10",
+      isDone: true
+    },
+    {
+      desc: "Зайти за хлебом",
+      time: "17:30",
+      isDone: true
+    },
+    {
+      desc: "Позвонить другу",
+      time: "18:01",
+      isDone: true
+    }
+  ]
+};
+
+const notify = (state = store, action) => {
   switch (action.type) {
-    case ADD_COMMENT: {
+    case "ADD_NOTIFY": {
       return {
         ...state,
-        comments: [...state.comments, action.payload],
-        count: state.count + 1
+        notify: [...state.notify, action.payload]
       };
     }
     default:
@@ -15,29 +33,9 @@ const comments = (state = { count: 0, comments: [] }, action) => {
   }
 };
 
-const users = (state = { count: 0, users: [] }, action) => {
-  switch (action.type) {
-    case "ADD_USER": {
-      console.log("user st", state);
-      return { 
-        users: [...state.users, action.payload],
-        count: state.count + 1
-      };
-    }
-    default:
-      return state;
-  }
-};
 
-export default combineReducers({
-  comments,
-  users
-});
+// export default combineReducers({
+//   notify
+// });
 
-// нужно чтобы скрыть структуру редюсеров если понадобится изменить название полей.
-// в внешних приложениях юзается только это название
-export const getCommentsCounts = state => 
-  state.comments.count
-
-export const getComments = state => 
-  state.comments
+export default notify;
