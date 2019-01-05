@@ -16,7 +16,6 @@ export const styles = theme => ({
     flexDirection: "column",
     alignItems: "center",
     padding: "15px",
-    marginTop: "65px"
   },
   hide: {
     display: "none"
@@ -59,5 +58,8 @@ export const styles = theme => ({
   },
   timeText: {
     margin: `${theme.spacing.unit * 2}px 0`
+  },
+  msg: {
+    padding: `0 ${theme.spacing.unit * 3}px`
   }
 });

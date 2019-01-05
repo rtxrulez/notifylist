@@ -14,7 +14,7 @@ function middleware(store) {
   };
 }
 
-export default initialState => {
+const initStore = initialState => {
   const store = createStore(
     rootReducer,
     initialState, // стейт по умолчанию
@@ -25,3 +25,9 @@ export default initialState => {
 
   return store;
 };
+
+// создание хронилища
+// store = createStore();
+export default initStore()
+
+

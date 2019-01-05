@@ -22,7 +22,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Switch>
+        <Switch className="content">
           <Route exact path="/" component={Cards} />
           <Route path="/settings" component={Settings} />
         </Switch>

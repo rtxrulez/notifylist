@@ -24,7 +24,12 @@ import {
   deleteNotify,
   editNotify
 } from "../redux/actions/notifyActions";
+import store from '../redux/store'
 import { styles } from "./CardsStyles";
+
+function immutableDelete(arr, index) {
+  return arr.slice(0, index).concat(arr.slice(index + 1));
+}
 
 class Cards extends React.Component {
   constructor(props) {
@@ -48,7 +53,7 @@ class Cards extends React.Component {
   // }
 
   closeEdit() {
-    const { taskList, editNotify } = this.props;
+    const { editNotify } = this.props;
 
     this.setState({
       editId: null
@@ -72,13 +77,14 @@ class Cards extends React.Component {
 
   deleteItem(key) {
     key = parseInt(key);
-    let { taskList, deleteNotify } = this.props;
-    deleteNotify(parseInt(key));
-    // this.setState({
-    //   taskList: [
-    //     ...taskList
-    //   ]
-    // })
+    let { deleteNotify } = this.props;
+    let d = deleteNotify(parseInt(key));
+    console.log('d', immutableDelete(this.state.taskList, key))
+    this.setState({
+      taskList: [
+        ...immutableDelete(this.state.taskList, key)
+      ]
+    })
   }
 
   _handleKeyPress(e) {
@@ -164,8 +170,8 @@ class Cards extends React.Component {
     const { classes } = this.props;
     const { editId, taskList } = this.state;
 
-    console.log("props", this.state);
-    let listDom = <h1> Список пуст </h1>;
+    console.log("Object.keys(taskList).length", Object.keys(taskList).length);
+    let listDom = <div className={classes.msg}><h1> Список пуст </h1></div>;
 
     if (Object.keys(taskList).length !== 0) {
       listDom = (
