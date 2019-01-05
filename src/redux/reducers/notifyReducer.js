@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 
 function immutableDelete(arr, index) {
+  console.log('iiiiiiiiiiii ', index)
   return arr.slice(0, index).concat(arr.slice(index + 1));
 }
 

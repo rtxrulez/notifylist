@@ -8,7 +8,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
-import Fab from "@material-ui/core/Fab";
+// import Fab from "@material-ui/core/Fab";
 import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -19,7 +19,11 @@ import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 // import { addComment } from "../redux/actions/commentsActions";
-import { addNotify, deleteNotify, editNotify } from "../redux/actions/notifyActions";
+import {
+  addNotify,
+  deleteNotify,
+  editNotify
+} from "../redux/actions/notifyActions";
 import { styles } from "./CardsStyles";
 
 class Cards extends React.Component {
@@ -27,26 +31,30 @@ class Cards extends React.Component {
     super(props);
   }
   state = {
-    taskList: {},
+    taskList: this.props.taskList,
     editId: null
   };
 
-  getList() {
-    fetch(`http://localhost:3000/data/data.json`)
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        this.setState({
-          taskList: json
-        });
-      });
-  }
+  // getList() {
+  //   fetch(`http://localhost:3000/data/data.json`)
+  //     .then(response => {
+  //       return response.json();
+  //     })
+  //     .then(json => {
+  //       this.setState({
+  //         taskList: json
+  //       });
+  //     });
+  // }
 
   closeEdit() {
+    const { taskList, editNotify } = this.props;
+
     this.setState({
       editId: null
     });
+
+    editNotify(this.state.taskList);
   }
 
   editItem(key) {
@@ -65,7 +73,12 @@ class Cards extends React.Component {
   deleteItem(key) {
     key = parseInt(key);
     let { taskList, deleteNotify } = this.props;
-    deleteNotify(parseInt(key))
+    deleteNotify(parseInt(key));
+    // this.setState({
+    //   taskList: [
+    //     ...taskList
+    //   ]
+    // })
   }
 
   _handleKeyPress(e) {
@@ -77,19 +90,23 @@ class Cards extends React.Component {
   handleChange(e) {
     let key = e.target.parentNode.dataset.key;
     let val = e.target.value;
-    let { taskList, editNotify } = this.props;
+    let { taskList } = this.state;
 
     taskList[key].desc = val;
-    editNotify(taskList)
+    this.setState({
+      taskList: taskList
+    });
   }
 
   handleChangeTime(e) {
     let key = e.target.parentNode.parentNode.dataset.key;
     let val = e.target.value;
-    let { taskList, editNotify } = this.props;
+    let { taskList } = this.state;
 
     taskList[key].time = val;
-    editNotify(taskList)
+    this.setState({
+      taskList: taskList
+    });
   }
 
   handleBlur(e) {
@@ -97,28 +114,28 @@ class Cards extends React.Component {
   }
 
   componentDidMount() {
-    if (
-      localStorage.getItem("taskList") !== null &&
-      localStorage.getItem("taskList").length
-    ) {
-      console.log("Есть локальный список");
-      let taskList = JSON.parse(localStorage.getItem("taskList"));
-      this.setState({
-        taskList: taskList
-      });
-    } else {
-      console.log("нет списка");
-      // json загрузка списка
-      this.getList();
-    }
+    // if (
+    //   localStorage.getItem("taskList") !== null &&
+    //   localStorage.getItem("taskList").length
+    // ) {
+    //   console.log("Есть локальный список");
+    //   let taskList = JSON.parse(localStorage.getItem("taskList"));
+    //   this.setState({
+    //     taskList: taskList
+    //   });
+    // } else {
+    //   console.log("нет списка");
+    //   // json загрузка списка
+    //   this.getList();
+    // }
   }
 
   componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem("taskList", JSON.stringify(nextState.taskList));
+    // localStorage.setItem("taskList", JSON.stringify(nextState.taskList));
   }
 
   addNewItem() {
-    const { addMyNotify, taskList } = this.props;
+    const { taskList } = this.state;
 
     let date = new Date();
 
@@ -131,16 +148,23 @@ class Cards extends React.Component {
       isDone: false
     };
 
-    console.log("newItem", newItem);
+    // console.log("newItem", taskList.push(newItem));
 
-    addMyNotify(newItem);
+    this.setState({
+      taskList: [
+        ...taskList,
+        newItem
+      ]
+    })
+    // addMyNotify(newItem);
     this.editItem(taskList.length);
   }
 
   render() {
-    const { classes, taskList } = this.props;
-    const { editId } = this.state;
-    console.log("props", this.props);
+    const { classes } = this.props;
+    const { editId, taskList } = this.state;
+
+    console.log("props", this.state);
     let listDom = <h1> Список пуст </h1>;
 
     if (Object.keys(taskList).length !== 0) {
@@ -224,7 +248,7 @@ class Cards extends React.Component {
     return (
       <div>
         {listDom}
-        <Fab
+        <Button
           className={classes.fab}
           color="primary"
           onClick={e => {
@@ -232,7 +256,7 @@ class Cards extends React.Component {
           }}
         >
           <AddIcon />
-        </Fab>
+        </Button>
       </div>
     );
   }
@@ -244,7 +268,6 @@ Cards.propTypes = {
 
 // Берет данные из глобального стейта и помещает в локальный
 function mapStateToProps(state) {
-  console.log("tsss", state);
   return {
     taskList: state.notify
   };

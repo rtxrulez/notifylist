@@ -1,3 +1,5 @@
+import { createAction } from "redux-actions";
+
 export const addNotify = payload => {
   return {
     type: "ADD_NOTIFY",
@@ -11,6 +13,8 @@ export const deleteNotify = payload => {
     payload
   };
 };
+
+// export const deleteNotify = createAction('DELETE_NOTIFY');
 
 export const editNotify = payload => {
   return {
