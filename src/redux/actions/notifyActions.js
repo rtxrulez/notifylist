@@ -11,3 +11,10 @@ export const deleteNotify = payload => {
     payload
   };
 };
+
+export const editNotify = payload => {
+  return {
+    type: "EDIT_NOTIFY",
+    payload
+  };
+};

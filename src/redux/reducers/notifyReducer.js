@@ -4,6 +4,10 @@ function immutableDelete(arr, index) {
   return arr.slice(0, index).concat(arr.slice(index + 1));
 }
 
+function immutableEdit(arr, index) {
+  return arr.slice(0, index).concat(arr.slice(index + 1));
+}
+
 const store = [
   {
     desc: "Полить кактус",
@@ -29,6 +33,9 @@ const notify = (state = store, action) => {
     }
     case "DELETE_NOTIFY": {
       return immutableDelete(state, action.payload);
+    }
+    case "EDIT_NOTIFY": {
+      return [...action.payload]
     }
     default:
       return state;

@@ -19,7 +19,7 @@ import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 // import { addComment } from "../redux/actions/commentsActions";
-import { addNotify, deleteNotify } from "../redux/actions/notifyActions";
+import { addNotify, deleteNotify, editNotify } from "../redux/actions/notifyActions";
 import { styles } from "./CardsStyles";
 
 class Cards extends React.Component {
@@ -77,23 +77,19 @@ class Cards extends React.Component {
   handleChange(e) {
     let key = e.target.parentNode.dataset.key;
     let val = e.target.value;
-    let { taskList } = this.state;
+    let { taskList, editNotify } = this.props;
 
     taskList[key].desc = val;
-    this.setState({
-      taskList: taskList
-    });
+    editNotify(taskList)
   }
 
   handleChangeTime(e) {
     let key = e.target.parentNode.parentNode.dataset.key;
     let val = e.target.value;
-    let { taskList } = this.state;
+    let { taskList, editNotify } = this.props;
 
     taskList[key].time = val;
-    this.setState({
-      taskList: taskList
-    });
+    editNotify(taskList)
   }
 
   handleBlur(e) {
@@ -256,7 +252,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   addMyNotify: addNotify,
-  deleteNotify: deleteNotify
+  deleteNotify: deleteNotify,
+  editNotify: editNotify
 };
 
 const CardWithRedux = connect(

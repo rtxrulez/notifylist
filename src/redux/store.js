@@ -1,6 +1,18 @@
-import { createStore, compose } from "redux";
+import { createStore, compose, applyMiddleware } from "redux";
 // подключаем инструкцию для измеенния стейта
 import rootReducer from "./reducers";
+
+// const middleware = store => next => action => {
+//   return next(action)
+// }
+
+function middleware(store) {
+  return function(next) {
+    return function(action) {
+      return next(action);
+    };
+  };
+}
 
 export default initialState => {
   const store = createStore(
@@ -13,4 +25,3 @@ export default initialState => {
 
   return store;
 };
- 

@@ -8,7 +8,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import { Provider, connect } from "react-redux";
 
 import createStore from "./redux/store";
-import { addNotify, deleteNotify } from "./redux/actions/notifyActions";
+import { addNotify, deleteNotify, editNotify } from "./redux/actions/notifyActions";
 import {
   getComments,
   getCommentsCounts
