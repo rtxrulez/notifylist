@@ -22,3 +22,5 @@ export const editNotify = payload => {
     payload
   };
 };
+
+export const timerAdd = createAction('TIMER_ADD');

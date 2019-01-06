@@ -61,5 +61,9 @@ export const styles = theme => ({
   },
   msg: {
     padding: `0 ${theme.spacing.unit * 3}px`
+  },
+  cardStarted: {
+    background: '#d1f1d1',
+    minHeight: '168px'
   }
 });

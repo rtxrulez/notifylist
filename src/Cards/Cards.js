@@ -12,21 +12,23 @@ import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
+import AlarmAdd from "@material-ui/icons/AlarmAdd";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
-import {test} from '../alarm'
+import { test } from "../alarm";
 
 // import { addComment } from "../redux/actions/commentsActions";
 import {
   addNotify,
   deleteNotify,
-  editNotify
+  editNotify,
+  timerAdd
 } from "../redux/actions/notifyActions";
-import store from '../redux/store'
+import store from "../redux/store";
 import { styles } from "./CardsStyles";
 
 function immutableDelete(arr, index) {
@@ -81,12 +83,10 @@ class Cards extends React.Component {
     key = parseInt(key);
     let { deleteNotify } = this.props;
     let d = deleteNotify(parseInt(key));
-    console.log('d', immutableDelete(this.state.taskList, key))
+    console.log("d", immutableDelete(this.state.taskList, key));
     this.setState({
-      taskList: [
-        ...immutableDelete(this.state.taskList, key)
-      ]
-    })
+      taskList: [...immutableDelete(this.state.taskList, key)]
+    });
   }
 
   _handleKeyPress(e) {
@@ -121,8 +121,24 @@ class Cards extends React.Component {
     this.closeEdit();
   }
 
+  timerAdd(key) {
+    console.log("timerAdd", key);
+    const { taskList } = this.state;
+    taskList[key].started = true;
+    this.setState(
+      {
+        taskList: taskList
+      },
+      () => {
+        console.log('tttt', this.state)
+        timerAdd(this.state.taskList);
+      }
+    );
+  }
+
   componentDidMount() {
-    test();
+    let t = test();
+    console.log("t", t);
     // if (
     //   localStorage.getItem("taskList") !== null &&
     //   localStorage.getItem("taskList").length
@@ -160,11 +176,8 @@ class Cards extends React.Component {
     // console.log("newItem", taskList.push(newItem));
 
     this.setState({
-      taskList: [
-        ...taskList,
-        newItem
-      ]
-    })
+      taskList: [...taskList, newItem]
+    });
     // addMyNotify(newItem);
     this.editItem(taskList.length);
   }
@@ -174,20 +187,26 @@ class Cards extends React.Component {
     const { editId, taskList } = this.state;
 
     console.log("Object.keys(taskList).length", Object.keys(taskList).length);
-    let listDom = <div className={classes.msg}><h1> Список пуст </h1></div>;
+    let listDom = (
+      <div className={classes.msg}>
+        <h1> Список пуст </h1>
+      </div>
+    );
 
     if (Object.keys(taskList).length !== 0) {
       listDom = (
         <div className={classes.cardList}>
           {taskList.map((item, key) => {
             let isEdit = key === editId;
+            const { started } = item;
             return (
               <Card
-                className={
+                className={classNames(
                   isEdit
                     ? [classes.card, classes.card2].join(" ")
-                    : classes.card
-                }
+                    : classes.card,
+                  started ? classes.cardStarted : ""
+                )}
                 key={key}
               >
                 <CardContent>
@@ -234,20 +253,28 @@ class Cards extends React.Component {
                   />
                 </CardContent>
 
-                <CardActions className={classes.cardActions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => this.editItem(key)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    className={classes.delete}
-                    onClick={() => this.deleteItem(key)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </CardActions>
+                {!started ? (
+                  <CardActions className={classes.cardActions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => this.editItem(key)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      className={classes.delete}
+                      onClick={() => this.deleteItem(key)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton
+                      className={classes.timerAdd}
+                      onClick={() => this.timerAdd(key)}
+                    >
+                      <AlarmAdd />
+                    </IconButton>
+                  </CardActions>
+                ) : null}
               </Card>
             );
           })}
@@ -285,7 +312,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   addMyNotify: addNotify,
   deleteNotify: deleteNotify,
-  editNotify: editNotify
+  editNotify: editNotify,
+  timerAdd: timerAdd
 };
 
 const CardWithRedux = connect(

@@ -8,7 +8,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import { Provider, connect } from "react-redux";
 
 import store from "./redux/store";
-import { addNotify, deleteNotify, editNotify } from "./redux/actions/notifyActions";
+import { addNotify, deleteNotify, editNotify, timerAdd } from "./redux/actions/notifyActions";
 import {
   getComments,
   getCommentsCounts
@@ -18,13 +18,37 @@ store.dispatch(
   addNotify({
     desc: "Сожрать сгущенку",
     time: "18:30",
-    isDone: false
+    isDone: false,
+    started: false
   })
 );
 
-store.dispatch(
-  deleteNotify(1)
-)
+// store.dispatch(
+//   timerAdd([
+//     {
+//       desc: "Полить кактус",
+//       time: "17:10",
+//       isDone: false,
+//       started: false
+//     },
+//     {
+//       desc: "Зайти за хлебом",
+//       time: "17:30",
+//       isDone: true,
+//       started: true
+//     },
+//     {
+//       desc: "Позвонить другу",
+//       time: "18:01",
+//       isDone: true,
+//       started: true
+//     }
+//   ])
+// )
+
+// store.dispatch(
+//   deleteNotify(1)
+// )
 
 ReactDOM.render(
   <Provider store={store}>
