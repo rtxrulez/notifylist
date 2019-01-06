@@ -7,14 +7,14 @@ export const addNotify = payload => {
   };
 };
 
-export const deleteNotify = payload => {
-  return {
-    type: "DELETE_NOTIFY",
-    payload
-  };
-};
+// export const deleteNotify = payload => {
+//   return {
+//     type: "DELETE_NOTIFY",
+//     payload
+//   };
+// };
 
-// export const deleteNotify = createAction('DELETE_NOTIFY');
+export const deleteNotify = createAction('DELETE_NOTIFY');
 
 export const editNotify = payload => {
   return {

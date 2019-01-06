@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
+import { deleteNotify } from "../actions/notifyActions";
 
 function immutableDelete(arr, index) {
-  console.log('iiiiiiiiiiii ', index)
   return arr.slice(0, index).concat(arr.slice(index + 1));
 }
 
@@ -32,11 +32,11 @@ const notify = (state = store, action) => {
     case "ADD_NOTIFY": {
       return [...state, action.payload];
     }
-    case "DELETE_NOTIFY": {
+    case deleteNotify.toString(): {
       return immutableDelete(state, action.payload);
     }
     case "EDIT_NOTIFY": {
-      return [...action.payload]
+      return [...action.payload];
     }
     default:
       return state;
