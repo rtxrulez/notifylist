@@ -18,6 +18,8 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
+import {test} from '../alarm'
+
 // import { addComment } from "../redux/actions/commentsActions";
 import {
   addNotify,
@@ -120,6 +122,7 @@ class Cards extends React.Component {
   }
 
   componentDidMount() {
+    test();
     // if (
     //   localStorage.getItem("taskList") !== null &&
     //   localStorage.getItem("taskList").length
