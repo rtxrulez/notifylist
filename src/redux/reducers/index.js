@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import notify from "./notifyReducer";
-console.log('n', notify)
+import {notify} from "./notifyReducer";
+
 // набор существующих редюсеров
 const rootReducer = combineReducers({
   notify: notify
