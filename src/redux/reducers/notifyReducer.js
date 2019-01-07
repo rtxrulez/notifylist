@@ -15,8 +15,8 @@ const store = [
   {
     desc: "Зайти за хлебом",
     time: "17:30",
-    isDone: true,
-    started: true
+    isDone: false,
+    started: false
   },
   {
     desc: "Позвонить другу",

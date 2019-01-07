@@ -19,7 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
-import { test } from "../alarm";
+import { test, timerStart } from "../alarm";
 
 // import { addComment } from "../redux/actions/commentsActions";
 import {
@@ -123,6 +123,7 @@ class Cards extends React.Component {
 
   timerAdd(key) {
     console.log("timerAdd", key);
+    const {timerAdd} = this.props
     const { taskList } = this.state;
     taskList[key].started = true;
     this.setState(
@@ -137,8 +138,7 @@ class Cards extends React.Component {
   }
 
   componentDidMount() {
-    let t = test();
-    console.log("t", t);
+    timerStart();
     // if (
     //   localStorage.getItem("taskList") !== null &&
     //   localStorage.getItem("taskList").length
