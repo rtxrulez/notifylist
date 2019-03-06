@@ -14,14 +14,14 @@ import {
   getCommentsCounts
 } from "./redux/reducers";
 
-store.dispatch(
-  addNotify({
-    desc: "Сожрать сгущенку",
-    time: "18:30",
-    isDone: false,
-    started: false
-  })
-);
+// store.dispatch(
+//   addNotify({
+//     desc: "Сожрать сгущенку",
+//     time: "18:30",
+//     isDone: false,
+//     started: false
+//   })
+// );
 
 // store.dispatch(
 //   timerAdd([
