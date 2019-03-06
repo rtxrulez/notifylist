@@ -1,8 +1,8 @@
 import alarm from "alarm";
 import store from "../redux/store";
 
-var now = new Date();
-var date = new Date(+now + 2000);
+// var now = new Date();
+// var date = new Date(+now + 2000);
 
 export const timerStart = () => {
   alarm(date, function() {
