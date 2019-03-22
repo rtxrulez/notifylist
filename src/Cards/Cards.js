@@ -160,7 +160,7 @@ class Cards extends React.Component {
     } else {
       console.log("нет списка");
       // json загрузка списка
-      this.getList();
+      // this.getList();
     }
   }
 
