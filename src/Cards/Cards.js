@@ -19,7 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
-import { addAlarm, timerStart } from "../alarm";
+import { addAlarm, alarmAddList } from "../alarm";
 
 // import { addComment } from "../redux/actions/commentsActions";
 import {
@@ -122,7 +122,7 @@ class Cards extends React.Component {
   }
 
   timerAdd(key) {
-    const {timerAdd} = this.props
+    const { timerAdd } = this.props
     const { taskList } = this.state;
     taskList[key].started = true;
     this.setState(
@@ -137,22 +137,31 @@ class Cards extends React.Component {
   }
 
   componentDidMount() {
-    // addAlarm('21:27');
-    // timerStart();
-    // if (
-    //   localStorage.getItem("taskList") !== null &&
-    //   localStorage.getItem("taskList").length
-    // ) {
-    //   console.log("Есть локальный список");
-    //   let taskList = JSON.parse(localStorage.getItem("taskList"));
-    //   this.setState({
-    //     taskList: taskList
-    //   });
-    // } else {
-    //   console.log("нет списка");
-    //   // json загрузка списка
-    //   this.getList();
-    // }
+    // запуск будильников при старте страницы
+    alarmAddList(this.props.taskList);
+    if (
+      localStorage.getItem(
+        "taskList"
+      ) !== null &&
+      localStorage.getItem("taskList")
+        .length
+    ) {
+      console.log(
+        "Есть локальный список"
+      );
+      let taskList = JSON.parse(
+        localStorage.getItem(
+          "taskList"
+        )
+      );
+      this.setState({
+        taskList: taskList
+      });
+    } else {
+      console.log("нет списка");
+      // json загрузка списка
+      this.getList();
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {

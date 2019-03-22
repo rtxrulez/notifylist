@@ -20,7 +20,7 @@ const store = [
   },
   {
     desc: "Позвонить другу",
-    time: "11:07",
+    time: "10:03",
     isDone: true,
     started: true
   }

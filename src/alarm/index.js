@@ -1,8 +1,8 @@
 import alarm from "alarm";
 import store from "../redux/store";
 
-// var now = new Date();
-// var date = new Date(+now + 2000);
+var now = new Date();
+var date = new Date(+now + 2000);
 
 export const timerStart = () => {
   alarm(date, function() {
@@ -19,8 +19,18 @@ export const addAlarm = time => {
   thisTime.setHours(hours);
   thisTime.setMinutes(minutes);
   thisTime.setSeconds('00')
-  console.log("add Alarm", thisTime);
+  console.info('add alarm time: ', time)
   alarm(thisTime, () => {
-    console.log("time: ", thisTime, "Alarm!!!!!");
+    console.info("time: ", thisTime, "Alarm!!!!!");
   });
 };
+
+
+export const alarmAddList = array => {
+    array.map((val, key)=> {
+        if(val.started) {
+            console.log("val", val);
+            addAlarm(val.time);
+        }
+    })
+}
